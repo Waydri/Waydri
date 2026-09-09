@@ -18,12 +18,16 @@ endif()
 
 set(RUST_BUILD_TYPE ${CMAKE_BUILD_TYPE})
 if(NOT RUST_BUILD_TYPE)
-    set(RUST_BUILD_TYPE "release")
+    set(RUST_BUILD_TYPE "debug")
 else()
     string(TOLOWER ${RUST_BUILD_TYPE} RUST_BUILD_TYPE)
 endif()
 
-set(RUST_LIB ${CMAKE_SOURCE_DIR}/../../target/${RUST_TARGET}/${RUST_BUILD_TYPE}/libwaydri_core.a)
+if(DEFINED RUST_LIB_DIR)
+    set(RUST_LIB "${RUST_LIB_DIR}/${RUST_TARGET}/${RUST_BUILD_TYPE}/libwaydri_core.a")
+else()
+    set(RUST_LIB "${CMAKE_SOURCE_DIR}/../../target/${RUST_TARGET}/${RUST_BUILD_TYPE}/libwaydri_core.a")
+endif()
 
 add_library(waydri_jni SHARED
     src/main/jni/waydri_native.cpp
