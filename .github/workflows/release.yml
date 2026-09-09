@@ -1,30 +1,53 @@
-name: Release
+name: release
+
 on:
   push:
     tags:
       - 'v*'
+
 jobs:
-  release:
+  release-apk:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libwayland-dev libxkbcommon-dev libvulkan-dev
-      - name: Build Linux
-        run: cargo build --release
-      - name: Upload Linux binary
-        uses: actions/upload-artifact@v4
+      - uses: actions/checkout@v7
+      
+      - name: Set up JDK 17
+        uses: actions/setup-java@v6
         with:
-          name: waydri-linux-x86_64
-          path: target/release/waydri
-      - name: Create Release
+          distribution: temurin
+          java-version: 17
+      
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      
+      - name: Setup NDK
+        run: sdkmanager "ndk;26.1.10909125"
+      
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android, armv7-linux-androideabi, x86_64-linux-android, i686-linux-android
+      
+      - name: Install cargo-ndk
+        run: cargo install cargo-ndk
+      
+      - name: Build Rust core (all ABIs)
+        run: |
+          cd core
+          for abi in aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android; do
+            cargo ndk --target $abi --platform 24 build --release
+            mkdir -p ../android/app/src/main/lib/${abi}
+            cp target/$abi/release/libwaydri_core.so ../android/app/src/main/lib/${abi}/
+          done
+      
+      - name: Build Release APK
+        working-directory: android
+        run: ./gradlew assembleRelease
+      
+      - name: Upload APK to Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            target/release/waydri
+          files: android/app/build/outputs/apk/release/*.apk
           generate_release_notes: true
