@@ -4,6 +4,7 @@ plugins {
 }
 
 android {
+    ndkVersion = "26.3.11579264"
     namespace = "com.waydri.compositor"
     compileSdk = 34
 
@@ -52,8 +53,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    compilerOptions {
-        jvmTarget = JvmTarget.JVM_17
+    kotlinOptions {
+        jvmTarget = "17"
     }
 
     buildFeatures {
