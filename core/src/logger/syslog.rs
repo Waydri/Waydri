@@ -9,7 +9,7 @@ impl SyslogLogger {
     pub fn new(ident: &str) -> Self {
         let ident = CString::new(ident).unwrap_or_default();
         unsafe {
-            openlog(ident.as_ptr(), LOG_PID, LOG_USER);
+            openlog(ident.as_ptr() as *const u8, LOG_PID, LOG_USER);
         }
         SyslogLogger { ident }
     }
