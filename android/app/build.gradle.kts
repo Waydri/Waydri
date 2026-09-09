@@ -3,8 +3,21 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+tasks.register<Exec>("setupRust") {
+    workingDir = rootProject.projectDir
+    commandLine(
+        "rustup", "target", "add",
+        "aarch64-linux-android",
+        "armv7-linux-androideabi",
+        "x86_64-linux-android",
+        "i686-linux-android"
+    )
+    ignoreExitValue = true
+}
+
 tasks.register<Exec>("buildRust") {
     workingDir = rootProject.projectDir
+    dependsOn(tasks.named("setupRust"))
     val buildType = if (project.gradle.startParameter.taskRequests.toString().contains("Release")) "release" else "debug"
     val command = mutableListOf("cargo", "build")
     command.addAll(listOf("--target", "aarch64-linux-android"))
