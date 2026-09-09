@@ -1,120 +1,127 @@
 [package]
-name = "waydri"
+name = "waydri-core"
 version = "0.11.0"
 edition = "2021"
 license = "Apache-2.0"
-description = "Wayland compositor for Android and Linux"
+description = "Waydri compositor core – Rust/Wayland engine"
 repository = "https://github.com/Waydri/Waydri"
 
+[lib]
+crate-type = ["cdylib", "rlib"]
+
 [dependencies]
-waydri-core = { path = "core" }
+# Core Wayland compositor framework
+smithay = { version = "0.3", features = ["backend_egl", "backend_gbm", "renderer_gl", "use_system_lib"] }
 
-[workspace]
-members = ["core"]
-resolver = "2"
+# Event loop
+calloop = "0.13"
 
-[profile.release]
-lto = true
-codegen-units = 1
-panic = "abort"
+# Logging
+log = "0.4"
+env_logger = "0.10"
+
+# Android-specific logger (only used when target_os = "android")
+android_logger = "0.13"
+
+# Optional: for serialization, etc.
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Utilities
+thiserror = "1.0"
+anyhow = "1.0"
+
+[target.'cfg(target_os="android")'.dependencies]
+android_logger = "0.13"
+
+[target.'cfg(not(target_os="android"))'.dependencies]
+env_logger = "0.10"
+
+[dev-dependencies]
+# For testing and benchmarking
+criterion = "0.5"
 
 [[bench]]
 name = "compositor_events"
-path = "benches/compositor/events.rs"
+path = "../benches/compositor/events.rs"
 harness = false
 
 [[bench]]
 name = "compositor_handlers"
-path = "benches/compositor/handlers.rs"
+path = "../benches/compositor/handlers.rs"
 harness = false
 
 [[bench]]
 name = "compositor_state"
-path = "benches/compositor/state.rs"
+path = "../benches/compositor/state.rs"
 harness = false
 
 [[bench]]
 name = "input_gesture"
-path = "benches/input/gesture.rs"
+path = "../benches/input/gesture.rs"
 harness = false
 
 [[bench]]
 name = "input_keyboard"
-path = "benches/input/keyboard.rs"
+path = "../benches/input/keyboard.rs"
 harness = false
 
 [[bench]]
 name = "input_pointer"
-path = "benches/input/pointer.rs"
+path = "../benches/input/pointer.rs"
 harness = false
 
 [[bench]]
 name = "input_touch"
-path = "benches/input/touch.rs"
+path = "../benches/input/touch.rs"
 harness = false
 
 [[bench]]
 name = "memory_allocation"
-path = "benches/memory/allocation.rs"
+path = "../benches/memory/allocation.rs"
 harness = false
 
 [[bench]]
 name = "memory_buffer"
-path = "benches/memory/buffer.rs"
+path = "../benches/memory/buffer.rs"
 harness = false
 
 [[bench]]
 name = "memory_dmabuf"
-path = "benches/memory/dmabuf.rs"
+path = "../benches/memory/dmabuf.rs"
 harness = false
 
 [[bench]]
 name = "renderer_gles"
-path = "benches/renderer/gles.rs"
+path = "../benches/renderer/gles.rs"
 harness = false
 
 [[bench]]
 name = "renderer_shader"
-path = "benches/renderer/shader.rs"
+path = "../benches/renderer/shader.rs"
 harness = false
 
 [[bench]]
 name = "renderer_texture"
-path = "benches/renderer/texture.rs"
+path = "../benches/renderer/texture.rs"
 harness = false
 
 [[bench]]
 name = "renderer_vulkan"
-path = "benches/renderer/vulkan.rs"
+path = "../benches/renderer/vulkan.rs"
 harness = false
 
 [[bench]]
 name = "startup_config"
-path = "benches/startup/config.rs"
+path = "../benches/startup/config.rs"
 harness = false
 
 [[bench]]
 name = "startup_init"
-path = "benches/startup/init.rs"
+path = "../benches/startup/init.rs"
 harness = false
 
 [[bench]]
 name = "startup_wayland"
-path = "benches/startup/wayland.rs"
+path = "../benches/startup/wayland.rs"
 harness = false
-
-[[bin]]
-name = "tool_bench_compositor"
-path = "tools/bench/compositor.rs"
-
-[[bin]]
-name = "tool_bench_input"
-path = "tools/bench/input.rs"
-
-[[bin]]
-name = "tool_bench_memory"
-path = "tools/bench/memory.rs"
-
-[[bin]]
-name = "tool_bench_renderer"
-path = "tools/bench/renderer.rs"
