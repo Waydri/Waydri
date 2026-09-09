@@ -15,17 +15,19 @@ tasks.register<Exec>("buildRust") {
         "--$buildType"
     )
 }
-preBuild.dependsOn("buildRust")
+tasks.preBuild {
+    dependsOn(tasks.named("buildRust"))
+}
 
 android {
     ndkVersion = "26.3.11579264"
     namespace = "com.waydri.compositor"
-    compileSdk = 35
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.waydri.compositor"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 11
         versionName = "0.11"
 
@@ -36,7 +38,10 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags("-std=c++17")
-                arguments("-DANDROID_STL=c++_shared")
+                arguments(
+                    "-DANDROID_STL=c++_shared",
+                    "-DRUST_LIB_DIR=${rootProject.projectDir}/target"
+                )
             }
         }
     }
@@ -59,9 +64,6 @@ android {
     externalNativeBuild {
         cmake {
             path = file("CMakeLists.txt")
-            arguments(
-                "-DRUST_LIB_DIR=${rootProject.projectDir}/target"
-            )
         }
     }
 
