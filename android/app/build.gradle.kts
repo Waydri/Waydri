@@ -12,7 +12,7 @@ tasks.register<Exec>("setupRust") {
         "x86_64-linux-android",
         "i686-linux-android"
     )
-    ignoreExitValue = true
+    isIgnoreExitValue = true
 }
 
 tasks.register<Exec>("buildRust") {
