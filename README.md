@@ -1,4 +1,4 @@
-# Waydri
+# Waydri - Wayland Composer
 
 Waydri is a Wayland compositor for Android and Linux that runs on mobile GPUs.
 It pairs a self-contained Rust core with a low-level Zig layer for GPU and
