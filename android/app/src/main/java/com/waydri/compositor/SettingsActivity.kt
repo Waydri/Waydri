@@ -93,7 +93,7 @@ class SettingsActivity : AppCompatActivity() {
         }
         row.addView(valueText)
         val slider = SeekBar(this).apply {
-            max = ((max - min) * 100).toInt()
+            this.max = ((max - min) * 100).toInt()
             progress = ((initial - min) * 100).toInt()
             setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(sb: SeekBar?, progress: Int, fromUser: Boolean) {
