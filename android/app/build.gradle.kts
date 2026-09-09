@@ -3,15 +3,29 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+tasks.register<Exec>("buildRust") {
+    workingDir = rootProject.projectDir
+    val buildType = if (project.gradle.startParameter.taskRequests.toString().contains("Release")) "release" else "debug"
+    commandLine(
+        "cargo", "build",
+        "--target", "aarch64-linux-android",
+        "--target", "armv7-linux-androideabi",
+        "--target", "x86_64-linux-android",
+        "--target", "i686-linux-android",
+        "--$buildType"
+    )
+}
+preBuild.dependsOn("buildRust")
+
 android {
     ndkVersion = "26.3.11579264"
     namespace = "com.waydri.compositor"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.waydri.compositor"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 11
         versionName = "0.11"
 
@@ -45,6 +59,9 @@ android {
     externalNativeBuild {
         cmake {
             path = file("CMakeLists.txt")
+            arguments(
+                "-DRUST_LIB_DIR=${rootProject.projectDir}/target"
+            )
         }
     }
 
