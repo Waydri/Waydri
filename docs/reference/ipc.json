@@ -1,0 +1,64 @@
+{
+    "protocol_version": 1,
+    "description": "Waydri IPC JSON Protocol Reference",
+    "transport": "Unix domain socket",
+    "encoding": "JSON, newline-delimited",
+    "command_format": {
+        "type": "command",
+        "id": "string (unique request identifier)",
+        "command": "string (command name)",
+        "args": "object (optional command arguments)"
+    },
+    "response_format": {
+        "type": "response",
+        "id": "string (matches request id)",
+        "success": "boolean",
+        "data": "object (response data, null on error)",
+        "error": "string (error message, null on success)"
+    },
+    "event_format": {
+        "type": "event",
+        "event": "string (event name)",
+        "data": "object (event data)",
+        "timestamp": "number (unix timestamp in milliseconds)"
+    },
+    "examples": {
+        "command": {
+            "request": {
+                "type": "command",
+                "id": "req-001",
+                "command": "set_layout",
+                "args": {
+                    "layout": "dwindle"
+                }
+            },
+            "response_success": {
+                "type": "response",
+                "id": "req-001",
+                "success": true,
+                "data": {
+                    "layout": "dwindle",
+                    "workspace": 0
+                }
+            },
+            "response_error": {
+                "type": "response",
+                "id": "req-001",
+                "success": false,
+                "data": null,
+                "error": "unknown layout: dwindle"
+            }
+        },
+        "event": {
+            "type": "event",
+            "event": "window_created",
+            "data": {
+                "window_id": 42,
+                "title": "Alacritty",
+                "app_id": "org.alacritty",
+                "workspace": 0
+            },
+            "timestamp": 1700000000000
+        }
+    }
+}

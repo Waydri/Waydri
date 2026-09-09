@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+echo "Running Wayland protocol tests..."
+if cargo test --test wayland_tests "$@"; then
+    echo "All Wayland tests passed"
+    exit 0
+else
+    echo "Wayland tests failed"
+    exit 1
+fi

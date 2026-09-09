@@ -1,0 +1,21 @@
+{
+  "name": "waydri",
+  "version": 1,
+  "colors": {
+    "background": "#11111B",
+    "foreground": "#CDD6F4",
+    "accent": "#CBA6F7",
+    "surface": "#1E1E28",
+    "border_focus": "#CBA6F7",
+    "border_unfocus": "#45475A",
+    "shadow": "#000000",
+    "inactive": "#313244",
+    "urgent": "#F38BA8"
+  },
+  "dimensions": {
+    "border_size": 2,
+    "gaps": 8,
+    "outer_gap": 16,
+    "corner_radius": 8
+  }
+}

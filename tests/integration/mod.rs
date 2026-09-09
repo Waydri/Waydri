@@ -1,0 +1,11 @@
+pub mod animation;
+pub mod effects;
+pub mod input;
+pub mod ipc;
+pub mod output;
+pub mod plugin;
+pub mod wayland;
+pub mod window;
+pub mod wlr_layer_shell;
+pub mod workspace;
+pub mod xdg_shell;

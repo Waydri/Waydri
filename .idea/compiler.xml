@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+    <component name="JavacConfiguration">
+        <option name="PROJECT_BYTECODE_VERSION" value="17" />
+    </component>
+    <component name="RustProjectSettings">
+        <option name="externalLinterEnabled" value="true" />
+        <option name="externalLinterCommand" value="clippy" />
+        <option name="runConfig" value="cargo" />
+    </component>
+</project>

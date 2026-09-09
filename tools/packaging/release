@@ -1,0 +1,81 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+CARGO_TOML="$PROJECT_ROOT/Cargo.toml"
+GRADLE_KTS="$PROJECT_ROOT/android/app/build.gradle.kts"
+
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 <version>" >&2
+    echo "Example: $0 0.12.0" >&2
+    exit 1
+fi
+
+VERSION="$1"
+
+if ! echo "$VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+    echo "Error: Invalid version format. Use X.Y.Z" >&2
+    exit 1
+fi
+
+echo "=== Waydri Release v${VERSION} ==="
+echo ""
+
+echo "Updating version in Cargo.toml..."
+sed -i "s/^version = \".*\"/version = \"$VERSION\"/" "$CARGO_TOML"
+
+if [ -f "$GRADLE_KTS" ]; then
+    echo "Updating version in android/app/build.gradle.kts..."
+    sed -i "s/versionName = \".*\"/versionName = \"$VERSION\"/" "$GRADLE_KTS"
+    sed -i "s/versionCode = [0-9]*/versionCode = $(echo "$VERSION" | tr -d '.' | sed 's/^0*//')/" "$GRADLE_KTS"
+fi
+
+echo "Building all targets..."
+bash "$SCRIPT_DIR/../build/package"
+
+echo ""
+echo "Creating git tag..."
+cd "$PROJECT_ROOT"
+if git rev-parse --is-inside-work-tree &>/dev/null; then
+    git add Cargo.toml android/app/build.gradle.kts 2>/dev/null || true
+    git commit -m "release: v${VERSION}" 2>/dev/null || true
+    git tag -a "v${VERSION}" -m "Release v${VERSION}" 2>/dev/null || true
+    echo "Tag v${VERSION} created."
+else
+    echo "Warning: Not a git repository. Skipping tag creation." >&2
+fi
+
+echo ""
+echo "Generating changelog..."
+CHANGELOG="$PROJECT_ROOT/output/CHANGELOG-v${VERSION}.md"
+
+{
+    echo "# Changelog v${VERSION}"
+    echo ""
+    echo "Released: $(date +%Y-%m-%d)"
+    echo ""
+    echo "## Changes"
+    echo ""
+    if git rev-parse --is-inside-work-tree &>/dev/null; then
+        PREV_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+        if [ -n "$PREV_TAG" ]; then
+            git log --pretty=format:"- %s (%h)" "$PREV_TAG"..HEAD 2>/dev/null || echo "- No changes recorded"
+        else
+            git log --pretty=format:"- %s (%h)" -20 2>/dev/null || echo "- No changes recorded"
+        fi
+    else
+        echo "- Release v${VERSION}"
+    fi
+    echo ""
+    echo "## Assets"
+    echo ""
+    echo "- waydri-v${VERSION}.apk (Android)"
+    echo "- waydri-v${VERSION}-linux-x86_64.tar.gz (Linux)"
+    echo "- waydri-v${VERSION}-android-libs.zip (Android native libs)"
+    echo "- checksums-sha256.txt"
+} > "$CHANGELOG"
+
+echo "Changelog written to: $CHANGELOG"
+echo ""
+echo "=== Release v${VERSION} Complete ==="

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+    <component name="ProjectRootManager" version="2" project-jdk-name="Rust" project-jdk-type="Rust SDK" />
+    <component name="RustSettings">
+        <option name="externalLinterEnabled" value="true" />
+        <option name="externalLinterCommand" value="clippy" />
+    </component>
+    <component name="RustProjectSettings">
+        <option name="runConfig" value="cargo" />
+        <option name="buildToolchains" />
+    </component>
+</project>

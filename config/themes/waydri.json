@@ -1,0 +1,64 @@
+{
+    "name": "Waydri",
+    "version": "1.0.0",
+    "description": "Waydri brand theme",
+    "colors": {
+        "background": "#0a0e14",
+        "foreground": "#b3b1ad",
+        "red": "#ff6b6b",
+        "green": "#7ec97b",
+        "cyan": "#36d8e5",
+        "purple": "#c792ea",
+        "yellow": "#ffcb6b",
+        "orange": "#ff9e64",
+        "blue": "#82aaff",
+        "magenta": "#c792ea",
+        "white": "#b3b1ad",
+        "black": "#0a0e14",
+        "bright_red": "#ff8787",
+        "bright_green": "#a6e99b",
+        "bright_cyan": "#7aebee",
+        "bright_purple": "#d4b0f0",
+        "bright_yellow": "#ffd97c",
+        "bright_orange": "#ffb87c",
+        "bright_blue": "#a4c4ff",
+        "bright_magenta": "#d4b0f0",
+        "bright_white": "#d0d0d0",
+        "bright_black": "#3b3d47"
+    },
+    "theme": {
+        "primary": "#82aaff",
+        "secondary": "#c792ea",
+        "accent": "#36d8e5",
+        "surface": "#131720",
+        "border": "#2a3040",
+        "shadow": "#000000",
+        "text_primary": "#b3b1ad",
+        "text_secondary": "#878580",
+        "text_disabled": "#4d4d4d",
+        "error": "#ff6b6b",
+        "warning": "#ffcb6b",
+        "success": "#7ec97b",
+        "info": "#82aaff"
+    },
+    "bar": {
+        "background": "#131720",
+        "foreground": "#b3b1ad",
+        "border": "#2a3040"
+    },
+    "window": {
+        "title_focused": "#82aaff",
+        "title_unfocused": "#4d4d4d",
+        "border_focused": "#82aaff",
+        "border_unfocused": "#2a3040",
+        "border_urgent": "#ff6b6b"
+    },
+    "workspace": {
+        "active_bg": "#82aaff",
+        "active_fg": "#0a0e14",
+        "inactive_bg": "#131720",
+        "inactive_fg": "#4d4d4d",
+        "urgent_bg": "#ff6b6b",
+        "urgent_fg": "#0a0e14"
+    }
+}

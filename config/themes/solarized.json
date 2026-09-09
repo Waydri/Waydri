@@ -1,0 +1,16 @@
+{
+    "name": "Solarized Dark",
+    "colors": {
+        "primary": "#268bd2",
+        "secondary": "#2aa198",
+        "accent": "#6c71c4",
+        "background": "#002b36",
+        "surface": "#073642",
+        "text": "#839496",
+        "border": "#586e75",
+        "shadow": "#000000"
+    },
+    "font": {"family": "monospace", "size": 10},
+    "border": {"width": 1, "radius": 0},
+    "shadow": {"enabled": false, "offset_x": 0, "offset_y": 2, "blur": 8, "color": "#000000"}
+}

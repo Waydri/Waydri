@@ -1,0 +1,17 @@
+#!/bin/bash
+set -euo pipefail
+echo "Running X11 compatibility tests..."
+XWAYLAND_BIN="xwayland/bin/xwayland"
+if [ ! -f "$XWAYLAND_BIN" ]; then
+    echo "Error: Xwayland binary not found at $XWAYLAND_BIN"
+    exit 1
+fi
+echo "Xwayland binary found: $XWAYLAND_BIN"
+echo "Running X11 smoke tests..."
+if cargo test --test integration_tests x11 "$@"; then
+    echo "X11 compatibility tests passed"
+    exit 0
+else
+    echo "X11 compatibility tests failed"
+    exit 1
+fi

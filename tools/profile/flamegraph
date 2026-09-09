@@ -1,0 +1,64 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+PROFILES_DIR="$PROJECT_ROOT/profiles"
+
+mkdir -p "$PROFILES_DIR"
+
+cd "$PROJECT_ROOT"
+
+if ! cargo build --release 2>&1; then
+    echo "Build failed." >&2
+    exit 1
+fi
+
+BINARY="$PROJECT_ROOT/target/release/waydri"
+if [ ! -f "$BINARY" ]; then
+    echo "Error: Binary not found at $BINARY" >&2
+    exit 1
+fi
+
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+PERF_DATA="$PROFILES_DIR/perf-$TIMESTAMP.data"
+FLAMEGRAPH="$PROFILES_DIR/flamegraph-$TIMESTAMP.svg"
+
+if command -v cargo-flamegraph &>/dev/null; then
+    echo "Generating flamegraph with cargo-flamegraph..."
+    cargo flamegraph \
+        --output "$FLAMEGRAPH" \
+        -- --headless
+elif command -v perf &>/dev/null; then
+    echo "Recording perf data..."
+    perf record -g -F 99 -o "$PERF_DATA" -- "$BINARY" --headless &
+    PERF_PID=$!
+    sleep 10
+    kill "$PERF_PID" 2>/dev/null || true
+    wait "$PERF_PID" 2>/dev/null || true
+
+    if command -v stackcollapse-perf.pl &>/dev/null && command -v flamegraph.pl &>/dev/null; then
+        echo "Generating flamegraph..."
+        perf script -i "$PERF_DATA" | \
+            stackcollapse-perf.pl | \
+            flamegraph.pl > "$FLAMEGRAPH"
+    else
+        echo "Error: FlameGraph tools not found." >&2
+        echo "Install from: https://github.com/brendangregg/FlameGraph" >&2
+        echo "  git clone https://github.com/brendangregg/FlameGraph /opt/FlameGraph" >&2
+        echo "  export PATH=/opt/FlameGraph:\$PATH" >&2
+        exit 1
+    fi
+else
+    echo "Error: No profiling tool available." >&2
+    echo "Install cargo-flamegraph: cargo install flamegraph" >&2
+    echo "Or install perf: apt install linux-tools-common" >&2
+    exit 1
+fi
+
+echo "Flamegraph generated: $FLAMEGRAPH"
+
+if [ -f "$FLAMEGRAPH" ] && command -v xdg-open &>/dev/null && [ -n "${DISPLAY:-}${WAYLAND_DISPLAY:-}" ]; then
+    echo "Opening flamegraph..."
+    xdg-open "$FLAMEGRAPH" 2>/dev/null || true
+fi

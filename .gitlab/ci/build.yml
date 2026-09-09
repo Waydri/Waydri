@@ -1,0 +1,38 @@
+stages:
+  - build
+
+build-rust:
+  stage: build
+  image: rust:1.75
+  before_script:
+    - apt-get update && apt-get install -y libwayland-dev libxkbcommon-dev
+  script:
+    - cargo build --release
+  artifacts:
+    paths:
+      - target/release/waydri
+    expire_in: 7 days
+  cache:
+    key: cargo-${CI_COMMIT_REF_SLUG}
+    paths:
+      - .cargo/
+
+build-android:
+  stage: build
+  image: eclipse-temurin:17-jdk
+  before_script:
+    - apt-get update && apt-get install -y wget unzip
+    - wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+    - mkdir -p /opt/android-sdk/cmdline-tools
+    - unzip -q commandlinetools-linux-11076708_latest.zip -d /opt/android-sdk/cmdline-tools
+    - mv /opt/android-sdk/cmdline-tools/cmdline-tools /opt/android-sdk/cmdline-tools/latest
+    - export ANDROID_HOME=/opt/android-sdk
+    - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
+    - yes | sdkmanager --licenses || true
+    - sdkmanager "ndk;26.1.10909125"
+  script:
+    - cd android && ./gradlew assembleRelease
+  artifacts:
+    paths:
+      - android/app/build/outputs/apk/release/*.apk
+    expire_in: 7 days

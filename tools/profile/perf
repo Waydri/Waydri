@@ -1,0 +1,48 @@
+#!/bin/bash
+set -euo pipefail
+
+TARGET=${1:-"target/debug/waydri"}
+DURATION=${2:-30}
+OUTPUT=${3:-"perf_profile.csv"}
+
+if [ ! -f "$TARGET" ]; then
+    echo "Error: binary not found at $TARGET"
+    exit 1
+fi
+
+echo "Profiling $TARGET for $DURATION seconds..."
+echo "timestamp,cpu_user,cpu_system,cpu_total,frame_count,avg_frame_ms,p99_frame_ms,max_frame_ms" > "$OUTPUT"
+
+$TARGET &
+PID=$!
+START_TIME=$(date +%s)
+
+while true; do
+    ELAPSED=$(( $(date +%s) - START_TIME ))
+    if [ "$ELAPSED" -ge "$DURATION" ]; then
+        break
+    fi
+
+    if ! kill -0 "$PID" 2>/dev/null; then
+        echo "Process exited early"
+        break
+    fi
+
+    TS=$(date +%s%N | cut -b1-13)
+
+    CPU_STAT=$(cat /proc/$PID/stat 2>/dev/null || echo "0 0 0")
+    CPU_USER=$(echo "$CPU_STAT" | awk '{print $14}')
+    CPU_SYS=$(echo "$CPU_STAT" | awk '{print $15}')
+    CPU_TOTAL=$((CPU_USER + CPU_SYS))
+
+    echo "$TS,$CPU_USER,$CPU_SYS,$CPU_TOTAL,0,0,0,0" >> "$OUTPUT"
+    echo "[$ELAPSED/${DURATION}s] CPU: user=$CPU_USER sys=$CPU_SYS total=$CPU_TOTAL"
+    sleep 1
+done
+
+if kill -0 "$PID" 2>/dev/null; then
+    kill "$PID" 2>/dev/null
+    wait "$PID" 2>/dev/null || true
+fi
+
+echo "Profile saved to $OUTPUT"

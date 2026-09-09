@@ -1,0 +1,16 @@
+{
+    "name": "Rose Pine",
+    "colors": {
+        "primary": "#9ccfd8",
+        "secondary": "#c4a7e7",
+        "accent": "#eb6f92",
+        "background": "#191724",
+        "surface": "#26233a",
+        "text": "#e0def4",
+        "border": "#6e6a86",
+        "shadow": "#000000"
+    },
+    "font": {"family": "monospace", "size": 10},
+    "border": {"width": 1, "radius": 0},
+    "shadow": {"enabled": false, "offset_x": 0, "offset_y": 2, "blur": 8, "color": "#000000"}
+}

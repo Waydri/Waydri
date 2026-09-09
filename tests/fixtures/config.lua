@@ -1,0 +1,41 @@
+return {
+  name = "waydri",
+  max_fps = 120,
+  border_size = 2,
+  gaps = 8,
+  log_level = "info",
+  notification_timeout = 5000,
+  follow_mouse = 1,
+  animate_mouse_windowdragging = true,
+  general = {
+    layout = "master_stack",
+    default_workspace = 1,
+    workspace_count = 5,
+  },
+  output = {
+    scale = 1.0,
+    vsync = true,
+    headless = false,
+  },
+  input = {
+    natural_scroll = false,
+    mouse_acceleration = false,
+    touchpad_scroll_factor = 0.5,
+  },
+  animation = {
+    enabled = true,
+    window_open_ms = 200,
+    window_close_ms = 150,
+    workspace_switch_ms = 250,
+    default_curve = "ease_in_out",
+  },
+  effects = {
+    blur = true,
+    blur_radius = 8,
+    shadows = true,
+    shadow_opacity = 0.6,
+    rounded_corners = true,
+    corner_radius = 8,
+    dim_inactive = 0.0,
+  },
+}

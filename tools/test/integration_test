@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+echo "Running integration tests..."
+if cargo test --test integration_tests "$@"; then
+    echo "All integration tests passed"
+    exit 0
+else
+    echo "Integration tests failed"
+    exit 1
+fi

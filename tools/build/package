@@ -1,0 +1,66 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+OUTPUT_DIR="$PROJECT_ROOT/output"
+VERSION=$(grep '^version' "$PROJECT_ROOT/Cargo.toml" | head -1 | sed 's/.*"\(.*\)"/\1/')
+
+if [ -z "$VERSION" ]; then
+    VERSION="0.11.0"
+fi
+
+mkdir -p "$OUTPUT_DIR"
+rm -rf "$OUTPUT_DIR"/*
+
+echo "=== Waydri v${VERSION} Release Package ==="
+echo ""
+
+echo "[1/5] Building Android APK..."
+bash "$SCRIPT_DIR/android_build" release
+
+echo ""
+echo "[2/5] Cross-compiling for aarch64-linux-android..."
+bash "$SCRIPT_DIR/cross_compile"
+
+echo ""
+echo "[3/5] Building Linux binary..."
+bash "$SCRIPT_DIR/linux_build"
+
+echo ""
+echo "[4/5] Generating checksums..."
+cd "$OUTPUT_DIR"
+
+find . -maxdepth 2 -type f \( -name "*.apk" -o -name "*.tar.gz" -o -name "*.zip" -o -name "*.so" \) | while read -r file; do
+    sha256sum "$file" >> checksums-sha256.txt
+done
+
+echo ""
+echo "[5/5] Creating release archives..."
+cd "$OUTPUT_DIR"
+
+for apk in android/*.apk; do
+    if [ -f "$apk" ]; then
+        zip -j "waydri-v${VERSION}-android.zip" "$apk"
+    fi
+done
+
+for tarball in linux/*.tar.gz; do
+    if [ -f "$tarball" ]; then
+        cp "$tarball" "waydri-v${VERSION}-linux-x86_64.tar.gz"
+    fi
+done
+
+for so in android-libs/*.so; do
+    if [ -f "$so" ]; then
+        zip -j "waydri-v${VERSION}-android-libs.zip" "$so"
+    fi
+done
+
+echo ""
+echo "=== Package Summary ==="
+echo "Version: $VERSION"
+echo "Artifacts:"
+ls -lh "$OUTPUT_DIR"/*.{zip,tar.gz,txt} 2>/dev/null || true
+echo ""
+echo "Done."

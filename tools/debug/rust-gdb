@@ -1,0 +1,42 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+BINARY="$PROJECT_ROOT/target/release/waydri"
+GDBINIT="$SCRIPT_DIR/gdbinit"
+
+if ! command -v rust-gdb &>/dev/null; then
+    echo "Error: rust-gdb not found in PATH" >&2
+    echo "Install with: rustup component add rust-src" >&2
+    exit 1
+fi
+
+if [ ! -f "$BINARY" ]; then
+    echo "Binary not found at $BINARY. Building..."
+    cd "$PROJECT_ROOT"
+    cargo build --release
+fi
+
+if [ ! -f "$BINARY" ]; then
+    echo "Error: Could not build binary" >&2
+    exit 1
+fi
+
+SOLIB_DIR="$PROJECT_ROOT/target/release"
+EXTRA_ARGS=""
+
+if [ $# -gt 0 ]; then
+    EXTRA_ARGS="$*"
+fi
+
+exec rust-gdb \
+    -q \
+    -ex "set pagination off" \
+    -ex "set print pretty on" \
+    -ex "set disassembly-flavor intel" \
+    -ex "set solib-search-path $SOLIB_DIR" \
+    -ex "set dirs $PROJECT_ROOT/src" \
+    -ex "source $GDBINIT" \
+    $EXTRA_ARGS \
+    -- "$BINARY"

@@ -1,0 +1,29 @@
+set pagination off
+set print pretty on
+set print object on
+set print static-members on
+set print vtbl on
+set confirm off
+set history save on
+set history filename ~/.gdb_history
+set history size 10000
+set disassembly-flavor intel
+handle SIGPIPE nostop noprint
+handle SIGUSR1 nostop noprint
+handle SIGUSR2 nostop noprint
+
+define hook-run
+    set disassembly-flavor intel
+end
+
+break waydri_main
+break waydri_init
+break waydri_shutdown
+
+define hook-continue
+    echo Continuing execution...\n
+end
+
+define hook-backtrace
+    echo Fetching backtrace...\n
+end

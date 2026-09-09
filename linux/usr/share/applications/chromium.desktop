@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Chromium Browser
+GenericName=Web Browser
+Comment=Access the Internet
+Exec=chromium
+Icon=Chromium
+Terminal=false
+Type=Application
+Categories=Network;WebBrowser;
+Keywords=internet;browser;web;
+StartupNotify=true

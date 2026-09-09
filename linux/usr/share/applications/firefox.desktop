@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Firefox Browser
+GenericName=Web Browser
+Comment=Browse the World Wide Web
+Exec=firefox
+Icon=Firefox
+Terminal=false
+Type=Application
+Categories=Network;WebBrowser;
+Keywords=internet;browser;web;
+StartupNotify=true

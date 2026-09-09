@@ -1,0 +1,16 @@
+{
+    "name": "Hyprland",
+    "colors": {
+        "primary": "#59c2ff",
+        "secondary": "#c594c5",
+        "accent": "#bb9af7",
+        "background": "#13151a",
+        "surface": "#1a1d23",
+        "text": "#c8d0dd",
+        "border": "#2f3340",
+        "shadow": "#000000"
+    },
+    "font": {"family": "monospace", "size": 10},
+    "border": {"width": 1, "radius": 0},
+    "shadow": {"enabled": false, "offset_x": 0, "offset_y": 2, "blur": 8, "color": "#000000"}
+}

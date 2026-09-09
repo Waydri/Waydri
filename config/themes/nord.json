@@ -1,0 +1,16 @@
+{
+    "name": "Nord",
+    "colors": {
+        "primary": "#88c0d0",
+        "secondary": "#81a1c1",
+        "accent": "#5e81ac",
+        "background": "#2e3440",
+        "surface": "#3b4252",
+        "text": "#eceff4",
+        "border": "#4c566a",
+        "shadow": "#000000"
+    },
+    "font": {"family": "monospace", "size": 10},
+    "border": {"width": 1, "radius": 0},
+    "shadow": {"enabled": false, "offset_x": 0, "offset_y": 2, "blur": 8, "color": "#000000"}
+}

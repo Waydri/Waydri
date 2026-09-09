@@ -1,0 +1,42 @@
+version: 2.1
+jobs:
+  android-build:
+    docker:
+      - image: cimg/android:2024.01
+    resource_class: large
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - gradle-{{ checksum "android/build.gradle" }}
+      - run:
+          name: Accept licenses
+          command: yes | sdkmanager --licenses || true
+      - run:
+          name: Build APK
+          command: |
+            cd android
+            ./gradlew assembleDebug
+      - save_cache:
+          key: gradle-{{ checksum "android/build.gradle" }}
+          paths:
+            - ~/.gradle/caches
+            - ~/.gradle/wrapper
+      - store_artifacts:
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+  android-test:
+    docker:
+      - image: cimg/android:2024.01
+    resource_class: large
+    steps:
+      - checkout
+      - run:
+          name: Run unit tests
+          command: |
+            cd android
+            ./gradlew test
+workflows:
+  android:
+    jobs:
+      - android-build
+      - android-test

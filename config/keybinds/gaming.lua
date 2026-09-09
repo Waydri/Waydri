@@ -1,0 +1,16 @@
+return {
+    ["Super+g"] = "toggle_gaming_mode",
+    ["Super+ctrl+g"] = "toggle_vsync",
+    ["Super+1"] = "workspace:1",
+    ["Super+2"] = "workspace:2",
+    ["Super+3"] = "workspace:3",
+    ["Super+4"] = "workspace:4",
+    ["Super+5"] = "workspace:5",
+    ["Super+Return"] = "game_launcher",
+    ["Super+Escape"] = "ungrab_input",
+    ["Super+F11"] = "toggle_fullscreen",
+    ["Super+q"] = "close_window",
+    ["Super+Tab"] = "next_workspace",
+    ["Super+Shift+Tab"] = "prev_workspace",
+    ["Super+Shift+q"] = "quit",
+}

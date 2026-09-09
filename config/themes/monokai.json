@@ -1,0 +1,16 @@
+{
+    "name": "Monokai",
+    "colors": {
+        "primary": "#66d9ef",
+        "secondary": "#ae81ff",
+        "accent": "#a6e22e",
+        "background": "#272822",
+        "surface": "#3e3d32",
+        "text": "#f8f8f2",
+        "border": "#75715e",
+        "shadow": "#000000"
+    },
+    "font": {"family": "monospace", "size": 10},
+    "border": {"width": 1, "radius": 0},
+    "shadow": {"enabled": false, "offset_x": 0, "offset_y": 2, "blur": 8, "color": "#000000"}
+}

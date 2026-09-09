@@ -1,0 +1,8 @@
+{
+    "plugin_dir": "~/.config/waydri/plugins",
+    "auto_load": false,
+    "sandbox": {
+        "enabled": true,
+        "allowed": ["network", "fs_read", "compositor", "input"]
+    }
+}

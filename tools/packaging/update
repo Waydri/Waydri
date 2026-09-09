@@ -1,0 +1,49 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+
+echo "=== Waydri Update ==="
+echo ""
+
+cd "$PROJECT_ROOT"
+
+if git rev-parse --is-inside-work-tree &>/dev/null; then
+    echo "Pulling latest changes..."
+    git pull --rebase origin main 2>/dev/null || git pull --rebase 2>/dev/null || echo "Warning: Could not pull. Check remote configuration." >&2
+fi
+
+echo "Updating Rust dependencies..."
+cargo update
+
+echo ""
+echo "Running build..."
+if ! cargo build --release 2>&1; then
+    echo "Build failed!" >&2
+    exit 1
+fi
+
+echo ""
+echo "Running tests..."
+TEST_OUTPUT=$(cargo test 2>&1) && TEST_RESULT=0 || TEST_RESULT=$?
+echo "$TEST_OUTPUT"
+
+echo ""
+echo "=== Update Summary ==="
+if [ "$TEST_RESULT" -eq 0 ]; then
+    echo "Status: All tests passed."
+else
+    echo "Status: Some tests failed." >&2
+fi
+
+if git rev-parse --is-inside-work-tree &>/dev/null; then
+    CURRENT_COMMIT=$(git rev-parse --short HEAD)
+    CURRENT_DATE=$(git log -1 --format=%ci)
+    echo "Commit: $CURRENT_COMMIT ($CURRENT_DATE)"
+fi
+
+CARGO_VERSION=$(grep '^version' Cargo.toml | head -1 | sed 's/.*"\(.*\)"/\1/')
+echo "Version: $CARGO_VERSION"
+echo ""
+echo "Done."

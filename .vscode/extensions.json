@@ -1,0 +1,13 @@
+{
+    "recommendations": [
+        "rust-lang.rust-analyzer",
+        "tamasfe.even-better-toml",
+        "sumneko.lua",
+        "EditorConfig.EditorConfig",
+        "yzhang.markdown-all-in-one",
+        "ms-vscode.hexeditor"
+    ],
+    "unwantedRecommendations": [
+        "serayuzgur.crates"
+    ]
+}

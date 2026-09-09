@@ -1,0 +1,12 @@
+#!/bin/sh
+XWAYLAND_DATADIR="${XWAYLAND_DATADIR:-/usr/share/X11}"
+XKB_CONFIG_ROOT="${XKB_CONFIG_ROOT:-/usr/share/X11/xkb}"
+XWAYLAND_LISTEN="${WAYLAND_DISPLAY:-waydri-xwayland}"
+XWAYLAND_LOGLEVEL="${XWAYLAND_LOGLEVEL:-info}"
+
+exec Xwayland \
+    -verbose ${XWAYLAND_LOGLEVEL} \
+    -listen ${XWAYLAND_LISTEN} \
+    -auth "${XAUTHORITY:-/dev/null}" \
+    -nolisten local \
+    "${@}"

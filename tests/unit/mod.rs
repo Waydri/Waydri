@@ -1,0 +1,14 @@
+pub mod animation;
+pub mod compositor;
+pub mod config;
+pub mod effects;
+pub mod input;
+pub mod ipc;
+pub mod layout;
+pub mod logger;
+pub mod output;
+pub mod plugin;
+pub mod renderer;
+pub mod utils;
+pub mod window;
+pub mod workspace;

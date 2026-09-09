@@ -1,0 +1,82 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+PROFILES_DIR="$PROJECT_ROOT/profiles"
+RECORD_TYPE="${1:-flamegraph}"
+
+mkdir -p "$PROFILES_DIR"
+
+cd "$PROJECT_ROOT"
+
+if ! cargo build --release 2>&1; then
+    echo "Build failed. Cannot profile." >&2
+    exit 1
+fi
+
+BINARY="$PROJECT_ROOT/target/release/waydri"
+if [ ! -f "$BINARY" ]; then
+    echo "Error: Binary not found at $BINARY" >&2
+    exit 1
+fi
+
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+
+case "$RECORD_TYPE" in
+    flamegraph|flame)
+        if command -v cargo-flamegraph &>/dev/null; then
+            cargo flamegraph \
+                --output "$PROFILES_DIR/flamegraph-$TIMESTAMP.svg" \
+                -- --headless
+        elif command -v perf &>/dev/null; then
+            PERF_DATA="$PROFILES_DIR/perf-$TIMESTAMP.data"
+            perf record -g -F 99 -o "$PERF_DATA" -- "$BINARY" --headless &
+            PERF_PID=$!
+            sleep 10
+            kill "$PERF_PID" 2>/dev/null || true
+            wait "$PERF_PID" 2>/dev/null || true
+
+            if command -v stackcollapse-perf.pl &>/dev/null; then
+                perf script -i "$PERF_DATA" | \
+                    stackcollapse-perf.pl | \
+                    flamegraph.pl > "$PROFILES_DIR/flamegraph-$TIMESTAMP.svg"
+            else
+                echo "Warning: stackcollapse-perf.pl not found. Install FlameGraph tools." >&2
+                echo "Raw perf data saved at: $PERF_DATA" >&2
+            fi
+        else
+            echo "Error: Neither cargo-flamegraph nor perf found." >&2
+            echo "Install with: cargo install flamegraph" >&2
+            echo "Or: apt install linux-tools-common" >&2
+            exit 1
+        fi
+        echo "Flamegraph saved to: $PROFILES_DIR/flamegraph-$TIMESTAMP.svg"
+        ;;
+    perf)
+        if ! command -v perf &>/dev/null; then
+            echo "Error: perf not found." >&2
+            echo "Install with: apt install linux-tools-common" >&2
+            exit 1
+        fi
+        PERF_DATA="$PROFILES_DIR/perf-$TIMESTAMP.data"
+        DURATION="${2:-10}"
+        echo "Recording perf data for ${DURATION}s..."
+        perf record -g -F 99 -o "$PERF_DATA" -- "$BINARY" --headless &
+        PERF_PID=$!
+        sleep "$DURATION"
+        kill "$PERF_PID" 2>/dev/null || true
+        wait "$PERF_PID" 2>/dev/null || true
+
+        echo ""
+        echo "Top functions by self-time:"
+        perf report -i "$PERF_DATA" --stdio --sort self 2>/dev/null | head -30
+        echo ""
+        echo "Perf data saved to: $PERF_DATA"
+        ;;
+    *)
+        echo "Unknown profile type: $RECORD_TYPE" >&2
+        echo "Usage: $0 [flamegraph|perf]" >&2
+        exit 1
+        ;;
+esac

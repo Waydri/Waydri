@@ -1,0 +1,16 @@
+{
+    "name": "Base16 Monokai",
+    "colors": {
+        "primary": "#81a2be",
+        "secondary": "#b294bb",
+        "accent": "#8abeb7",
+        "background": "#181818",
+        "surface": "#282828",
+        "text": "#d8d8d8",
+        "border": "#383838",
+        "shadow": "#000000"
+    },
+    "font": {"family": "monospace", "size": 10},
+    "border": {"width": 1, "radius": 0},
+    "shadow": {"enabled": false, "offset_x": 0, "offset_y": 2, "blur": 8, "color": "#000000"}
+}

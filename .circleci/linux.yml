@@ -1,0 +1,71 @@
+version: 2.1
+jobs:
+  linux-build:
+    docker:
+      - image: cimg/rust:1.75
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - cargo-{{ checksum "Cargo.lock" }}
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y libwayland-dev libxkbcommon-dev libvulkan-dev
+      - run:
+          name: Build
+          command: cargo build --release
+      - save_cache:
+          key: cargo-{{ checksum "Cargo.lock" }}
+          paths:
+            - ~/.cargo
+      - store_artifacts:
+          path: target/release/waydri
+  linux-test:
+    docker:
+      - image: cimg/rust:1.75
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - cargo-{{ checksum "Cargo.lock" }}
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y libwayland-dev libxkbcommon-dev
+      - run:
+          name: Run all tests
+          command: |
+            cargo test --test unit_tests
+            cargo test --test integration_tests
+            cargo test --test wayland_tests
+      - run:
+          name: Run clippy
+          command: cargo clippy --package waydri-core -- -D warnings
+  linux-cross:
+    docker:
+      - image: cimg/rust:1.75
+    steps:
+      - checkout
+      - run:
+          name: Install cross-compilation tools
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y gcc-aarch64-linux-gnu
+            rustup target add aarch64-unknown-linux-gnu
+      - run:
+          name: Cross-compile for ARM64
+          command: |
+            cargo build --release --target aarch64-unknown-linux-gnu
+workflows:
+  linux:
+    jobs:
+      - linux-test
+      - linux-build:
+          requires:
+            - linux-test
+      - linux-cross:
+          requires:
+            - linux-test

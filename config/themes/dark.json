@@ -1,0 +1,16 @@
+{
+    "name": "Dark",
+    "colors": {
+        "primary": "#2196f3",
+        "secondary": "#673ab7",
+        "accent": "#00bcd4",
+        "background": "#121212",
+        "surface": "#1e1e1e",
+        "text": "#e0e0e0",
+        "border": "#333333",
+        "shadow": "#000000"
+    },
+    "font": {"family": "monospace", "size": 10},
+    "border": {"width": 1, "radius": 0},
+    "shadow": {"enabled": false, "offset_x": 0, "offset_y": 2, "blur": 8, "color": "#000000"}
+}

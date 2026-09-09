@@ -1,0 +1,15 @@
+Waydri Contributors
+
+Maintainers
+- Alexandru Waydri
+  email: alexandru@waydri.dev
+
+Core
+- Rust core: Alexandru Waydri
+- Zig hardware layer: Alexandru Waydri
+- Android integration: Alexandru Waydri
+- XWayland compatibility: Alexandru Waydri
+
+Contributors
+- This list grows as contributions land. Add your name here when your
+  first contribution is merged.

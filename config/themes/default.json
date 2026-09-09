@@ -1,0 +1,28 @@
+{
+    "name": "default",
+    "colors": {
+        "primary": "#4c7899",
+        "secondary": "#5a9fd4",
+        "accent": "#8ab4f8",
+        "background": "#1e1e2e",
+        "surface": "#2a2a3e",
+        "text": "#cdd6f4",
+        "border": "#45475a",
+        "shadow": "#000000"
+    },
+    "font": {
+        "family": "monospace",
+        "size": 10
+    },
+    "border": {
+        "width": 1,
+        "radius": 0
+    },
+    "shadow": {
+        "enabled": false,
+        "offset_x": 0,
+        "offset_y": 2,
+        "blur": 8,
+        "color": "#000000"
+    }
+}

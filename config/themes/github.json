@@ -1,0 +1,16 @@
+{
+    "name": "GitHub Dark",
+    "colors": {
+        "primary": "#58a6ff",
+        "secondary": "#d2a8ff",
+        "accent": "#3fb950",
+        "background": "#0d1117",
+        "surface": "#161b22",
+        "text": "#c9d1d9",
+        "border": "#30363d",
+        "shadow": "#000000"
+    },
+    "font": {"family": "monospace", "size": 10},
+    "border": {"width": 1, "radius": 0},
+    "shadow": {"enabled": false, "offset_x": 0, "offset_y": 2, "blur": 8, "color": "#000000"}
+}

@@ -1,0 +1,50 @@
+#!/bin/bash
+set -euo pipefail
+
+PROJECT_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+OUTPUT_DIR="$PROJECT_ROOT/output/linux"
+VERSION=$(grep '^version' "$PROJECT_ROOT/Cargo.toml" | head -1 | sed 's/.*"\(.*\)"/\1/')
+
+if [ -z "$VERSION" ]; then
+    VERSION="0.11.0"
+fi
+
+mkdir -p "$OUTPUT_DIR"
+
+echo "Building waydri for Linux (release)..."
+cd "$PROJECT_ROOT"
+
+cargo build --release
+
+BINARY="$PROJECT_ROOT/target/release/waydri"
+if [ ! -f "$BINARY" ]; then
+    echo "Error: Binary not found at $BINARY" >&2
+    exit 1
+fi
+
+strip "$BINARY"
+
+TARBALL_NAME="waydri-v${VERSION}-linux-x86_64.tar.gz"
+TARBALL_DIR="$OUTPUT_DIR/waydri-$VERSION"
+mkdir -p "$TARBALL_DIR/bin"
+mkdir -p "$TARBALL_DIR/config"
+mkdir -p "$TARBALL_DIR/core"
+
+cp "$BINARY" "$TARBALL_DIR/bin/"
+
+if [ -d "$PROJECT_ROOT/config" ]; then
+    cp -r "$PROJECT_ROOT/config/"* "$TARBALL_DIR/config/" 2>/dev/null || true
+fi
+
+find "$PROJECT_ROOT/target/release" -name "libwaydri*.so" | while read -r lib; do
+    cp "$lib" "$TARBALL_DIR/core/"
+done
+
+find "$PROJECT_ROOT/target/release" -name "libwaydri*.rlib" | while read -r lib; do
+    cp "$lib" "$TARBALL_DIR/core/"
+done
+
+cd "$OUTPUT_DIR"
+tar -czf "$TARBALL_NAME" "waydri-$VERSION"
+
+echo "Linux build complete: $OUTPUT_DIR/$TARBALL_NAME"

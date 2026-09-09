@@ -1,0 +1,16 @@
+{
+    "name": "Dracula",
+    "colors": {
+        "primary": "#bd93f9",
+        "secondary": "#ff79c6",
+        "accent": "#8be9fd",
+        "background": "#282a36",
+        "surface": "#44475a",
+        "text": "#f8f8f2",
+        "border": "#6272a4",
+        "shadow": "#000000"
+    },
+    "font": {"family": "monospace", "size": 10},
+    "border": {"width": 1, "radius": 0},
+    "shadow": {"enabled": false, "offset_x": 0, "offset_y": 2, "blur": 8, "color": "#000000"}
+}

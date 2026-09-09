@@ -1,0 +1,64 @@
+{
+    "name": "My Custom Theme",
+    "version": "1.0.0",
+    "description": "A custom Waydri theme",
+    "colors": {
+        "background": "#1a1b26",
+        "foreground": "#c0caf5",
+        "red": "#f7768e",
+        "green": "#9ece6a",
+        "cyan": "#7dcfff",
+        "purple": "#bb9af7",
+        "yellow": "#e0af68",
+        "orange": "#ff9e64",
+        "blue": "#7aa2f7",
+        "magenta": "#bb9af7",
+        "white": "#c0caf5",
+        "black": "#1a1b26",
+        "bright_red": "#f7768e",
+        "bright_green": "#9ece6a",
+        "bright_cyan": "#b4f9f8",
+        "bright_purple": "#c0a8e8",
+        "bright_yellow": "#ffdd57",
+        "bright_orange": "#ffaf70",
+        "bright_blue": "#89b4fa",
+        "bright_magenta": "#c0a8e8",
+        "bright_white": "#ffffff",
+        "bright_black": "#414868"
+    },
+    "theme": {
+        "primary": "#7aa2f7",
+        "secondary": "#bb9af7",
+        "accent": "#7dcfff",
+        "surface": "#24283b",
+        "border": "#3b4261",
+        "shadow": "#000000",
+        "text_primary": "#c0caf5",
+        "text_secondary": "#9aa5ce",
+        "text_disabled": "#565f89",
+        "error": "#f7768e",
+        "warning": "#e0af68",
+        "success": "#9ece6a",
+        "info": "#7aa2f7"
+    },
+    "bar": {
+        "background": "#1f2335",
+        "foreground": "#c0caf5",
+        "border": "#3b4261"
+    },
+    "window": {
+        "title_focused": "#7aa2f7",
+        "title_unfocused": "#565f89",
+        "border_focused": "#7aa2f7",
+        "border_unfocused": "#3b4261",
+        "border_urgent": "#f7768e"
+    },
+    "workspace": {
+        "active_bg": "#7aa2f7",
+        "active_fg": "#1a1b26",
+        "inactive_bg": "#1f2335",
+        "inactive_fg": "#565f89",
+        "urgent_bg": "#f7768e",
+        "urgent_fg": "#1a1b26"
+    }
+}

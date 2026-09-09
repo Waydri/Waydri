@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+echo "Running benchmarks..."
+cargo bench --package waydri-core 2>&1 | tee benchmark_results.txt
+echo "Results saved to benchmark_results.txt"
+if [ -f benchmark_results.txt.bak ]; then
+    echo "Comparing with previous run..."
+    diff benchmark_results.txt.bak benchmark_results.txt || true
+fi
+cp benchmark_results.txt benchmark_results.txt.bak

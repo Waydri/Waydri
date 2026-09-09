@@ -1,0 +1,16 @@
+{
+    "name": "Light",
+    "colors": {
+        "primary": "#4078f2",
+        "secondary": "#a626a4",
+        "accent": "#0184bc",
+        "background": "#fafafa",
+        "surface": "#f0f0f0",
+        "text": "#383a42",
+        "border": "#d4d4d4",
+        "shadow": "#e0e0e0"
+    },
+    "font": {"family": "monospace", "size": 10},
+    "border": {"width": 1, "radius": 0},
+    "shadow": {"enabled": false, "offset_x": 0, "offset_y": 2, "blur": 8, "color": "#e0e0e0"}
+}

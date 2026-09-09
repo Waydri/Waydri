@@ -1,0 +1,21 @@
+stages:
+  - release
+
+release-tag:
+  stage: release
+  image: rust:1.75
+  before_script:
+    - apt-get update && apt-get install -y libwayland-dev libxkbcommon-dev git
+    - git config user.name "CI Bot"
+    - git config user.email "ci@waydri.dev"
+  script:
+    - cargo build --release
+    - VERSION=$(grep "^version" Cargo.toml | head -1 | sed 's/.*"\(.*\)".*/\1/')
+    - git tag -a "v${VERSION}" -m "Release v${VERSION}"
+    - git push origin "v${VERSION}"
+  artifacts:
+    paths:
+      - target/release/waydri
+  only:
+    - main
+  when: manual

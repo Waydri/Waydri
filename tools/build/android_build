@@ -1,0 +1,51 @@
+#!/bin/bash
+set -euo pipefail
+
+BUILD_TYPE="${1:-debug}"
+ANDROID_HOME="${ANDROID_HOME:-$HOME/Android/Sdk}"
+PROJECT_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+OUTPUT_DIR="$PROJECT_ROOT/output/android"
+GRADLE_TASK="assembleDebug"
+
+if [ "$BUILD_TYPE" = "release" ]; then
+    GRADLE_TASK="assembleRelease"
+fi
+
+if [ ! -d "$ANDROID_HOME" ]; then
+    echo "Error: ANDROID_HOME not found at $ANDROID_HOME" >&2
+    echo "Set ANDROID_HOME to your Android SDK path." >&2
+    exit 1
+fi
+
+if [ ! -d "$PROJECT_ROOT/android" ]; then
+    echo "Error: android/ directory not found in $PROJECT_ROOT" >&2
+    exit 1
+fi
+
+export ANDROID_HOME
+mkdir -p "$OUTPUT_DIR"
+
+echo "Building Android APK ($BUILD_TYPE)..."
+cd "$PROJECT_ROOT/android"
+
+if [ -f "./gradlew" ]; then
+    ./gradlew "$GRADLE_TASK" --no-daemon --stacktrace
+else
+    gradle "$GRADLE_TASK" --no-daemon --stacktrace
+fi
+
+APK_SOURCE=""
+if [ "$BUILD_TYPE" = "release" ]; then
+    APK_SOURCE=$(find . -name "*.apk" -path "*/release/*" | head -1)
+else
+    APK_SOURCE=$(find . -name "*.apk" -path "*/debug/*" | head -1)
+fi
+
+if [ -z "$APK_SOURCE" ]; then
+    echo "Error: APK not found after build" >&2
+    exit 1
+fi
+
+APK_NAME="waydri-v0.11.0-${BUILD_TYPE}.apk"
+cp "$APK_SOURCE" "$OUTPUT_DIR/$APK_NAME"
+echo "$OUTPUT_DIR/$APK_NAME"

@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+echo "Running unit tests..."
+if cargo test --test unit_tests -- --nocapture "$@"; then
+    echo "All unit tests passed"
+    exit 0
+else
+    echo "Unit tests failed"
+    exit 1
+fi

@@ -1,0 +1,67 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+OUTPUT_DIR="$PROJECT_ROOT/output/android"
+VERSION=$(grep '^version' "$PROJECT_ROOT/Cargo.toml" | head -1 | sed 's/.*"\(.*\)"/\1/')
+
+if [ -z "$VERSION" ]; then
+    VERSION="0.11.0"
+fi
+
+mkdir -p "$OUTPUT_DIR"
+
+echo "Building signed Android APK..."
+cd "$PROJECT_ROOT/android"
+
+if [ -f "./gradlew" ]; then
+    ./gradlew assembleRelease --no-daemon --stacktrace
+else
+    gradle assembleRelease --no-daemon --stacktrace
+fi
+
+APK_SOURCE=$(find . -name "*.apk" -path "*/release/*" | head -1)
+if [ -z "$APK_SOURCE" ]; then
+    echo "Error: Release APK not found after build" >&2
+    exit 1
+fi
+
+APK_UNSIGNED="$OUTPUT_DIR/waydri-v${VERSION}-unsigned.apk"
+APK_SIGNED="$OUTPUT_DIR/waydri-v${VERSION}-signed.apk"
+APK_FINAL="$OUTPUT_DIR/waydri-v${VERSION}.apk"
+
+cp "$APK_SOURCE" "$APK_UNSIGNED"
+
+KEYSTORE="$PROJECT_ROOT/android/keystore.jks"
+if [ -f "$KEYSTORE" ]; then
+    echo "Signing APK with keystore..."
+    jarsigner \
+        -verbose \
+        -sigalg SHA256withRSA \
+        -digestalg SHA-256 \
+        -keystore "$KEYSTORE" \
+        "$APK_UNSIGNED" \
+        waydri-key 2>/dev/null
+
+    cp "$APK_UNSIGNED" "$APK_SIGNED"
+else
+    echo "Warning: No keystore found at $KEYSTORE" >&2
+    echo "Skipping signing. APK is unsigned." >&2
+    cp "$APK_UNSIGNED" "$APK_SIGNED"
+fi
+
+if command -v zipalign &>/dev/null; then
+    echo "Running zipalign..."
+    zipalign -v -p 4 "$APK_SIGNED" "$APK_FINAL"
+else
+    echo "Warning: zipalign not found, skipping alignment" >&2
+    cp "$APK_SIGNED" "$APK_FINAL"
+fi
+
+APK_SIZE=$(du -h "$APK_FINAL" | cut -f1)
+echo ""
+echo "APK build complete:"
+echo "  Path: $APK_FINAL"
+echo "  Size: $APK_SIZE"
+echo "  Version: $VERSION"

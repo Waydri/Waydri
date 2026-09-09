@@ -1,0 +1,16 @@
+{
+    "name": "Oceanic Next",
+    "colors": {
+        "primary": "#6699cc",
+        "secondary": "#c594c5",
+        "accent": "#5fb3b3",
+        "background": "#1b2b34",
+        "surface": "#243039",
+        "text": "#c0c5ce",
+        "border": "#65737e",
+        "shadow": "#000000"
+    },
+    "font": {"family": "monospace", "size": 10},
+    "border": {"width": 1, "radius": 0},
+    "shadow": {"enabled": false, "offset_x": 0, "offset_y": 2, "blur": 8, "color": "#000000"}
+}

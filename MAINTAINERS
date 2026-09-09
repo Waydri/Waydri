@@ -1,0 +1,34 @@
+Waydri Maintainers
+
+Project lead
+- Alexandru Waydri
+  email: alexandru@waydri.dev
+  role: release management, architecture decisions, security
+
+Core maintainer
+- Alexandru Waydri
+  email: alexandru@waydri.dev
+  role: Rust core, Zig hardware layer, review
+
+Android maintainer
+- Alexandru Waydri
+  email: alexandru@waydri.dev
+  role: Android app, JNI, rendering pipeline
+
+Triagers
+- Open for nomination. A triager triages issues, reproduces bugs, and
+  guides contributors through the review process.
+
+Maintainer expectations
+- Review pull requests within one week.
+- Respond to security reports within 72 hours.
+- Keep the roadmap and changelog accurate.
+- Enforce the code of conduct.
+
+Becoming a maintainer
+- Demonstrate sustained contributions and reliable reviews.
+- Be nominated by an existing maintainer.
+- Reach consensus within the maintainer team.
+
+If you are a maintainer and want to step down, post a notice in the issue
+tracker so the change of role is visible to the community.

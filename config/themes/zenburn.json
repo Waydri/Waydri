@@ -1,0 +1,64 @@
+{
+    "name": "Zenburn",
+    "version": "1.0.0",
+    "description": "Zenburn theme for Waydri",
+    "colors": {
+        "background": "#3f3f3f",
+        "foreground": "#dcdccc",
+        "red": "#dca3a3",
+        "green": "#8faf7f",
+        "cyan": "#93e0e3",
+        "purple": "#dc8cc3",
+        "yellow": "#f0dfaf",
+        "orange": "#dfaf8f",
+        "blue": "#8cd0d3",
+        "magenta": "#dc8cc3",
+        "white": "#dcdccc",
+        "black": "#3f3f3f",
+        "bright_red": "#e89393",
+        "bright_green": "#a0d0a0",
+        "bright_cyan": "#b0e0e8",
+        "bright_purple": "#ec93d3",
+        "bright_yellow": "#f8e8c0",
+        "bright_orange": "#efcf9f",
+        "bright_blue": "#acd0d3",
+        "bright_magenta": "#ec93d3",
+        "bright_white": "#ffffff",
+        "bright_black": "#666666"
+    },
+    "theme": {
+        "primary": "#8faf7f",
+        "secondary": "#dc8cc3",
+        "accent": "#93e0e3",
+        "surface": "#4f4f4f",
+        "border": "#5f5f5f",
+        "shadow": "#000000",
+        "text_primary": "#dcdccc",
+        "text_secondary": "#b0b0a0",
+        "text_disabled": "#808080",
+        "error": "#dca3a3",
+        "warning": "#f0dfaf",
+        "success": "#8faf7f",
+        "info": "#8cd0d3"
+    },
+    "bar": {
+        "background": "#4f4f4f",
+        "foreground": "#dcdccc",
+        "border": "#5f5f5f"
+    },
+    "window": {
+        "title_focused": "#8faf7f",
+        "title_unfocused": "#808080",
+        "border_focused": "#8faf7f",
+        "border_unfocused": "#5f5f5f",
+        "border_urgent": "#dca3a3"
+    },
+    "workspace": {
+        "active_bg": "#8faf7f",
+        "active_fg": "#3f3f3f",
+        "inactive_bg": "#4f4f4f",
+        "inactive_fg": "#808080",
+        "urgent_bg": "#dca3a3",
+        "urgent_fg": "#3f3f3f"
+    }
+}

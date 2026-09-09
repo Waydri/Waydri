@@ -1,0 +1,68 @@
+version: 2.1
+orbs:
+  rust: circleci/rust@1.6.1
+  android: circleci/android@2.4.0
+jobs:
+  build:
+    docker:
+      - image: cimg/rust:1.75
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - cargo-{{ checksum "Cargo.lock" }}
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y libwayland-dev libxkbcommon-dev
+      - run:
+          name: Build
+          command: cargo build --release
+      - save_cache:
+          key: cargo-{{ checksum "Cargo.lock" }}
+          paths:
+            - ~/.cargo
+      - store_artifacts:
+          path: target/release/waydri
+  test:
+    docker:
+      - image: cimg/rust:1.75
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - cargo-{{ checksum "Cargo.lock" }}
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y libwayland-dev libxkbcommon-dev
+      - run:
+          name: Run tests
+          command: cargo test --package waydri-core
+      - run:
+          name: Run clippy
+          command: cargo clippy --package waydri-core -- -D warnings
+  lint:
+    docker:
+      - image: cimg/rust:1.75
+    steps:
+      - checkout
+      - run:
+          name: Check formatting
+          command: cargo fmt --all -- --check
+      - run:
+          name: Run clippy
+          command: |
+            cargo clippy --package waydri-core -- -D warnings
+workflows:
+  build-test:
+    jobs:
+      - lint
+      - build:
+          requires:
+            - lint
+      - test:
+          requires:
+            - lint

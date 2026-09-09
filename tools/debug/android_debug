@@ -1,0 +1,89 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+OUTPUT_DIR="$PROJECT_ROOT/output/android"
+DEVICE_SERIAL=""
+
+if [ $# -ge 1 ]; then
+    DEVICE_SERIAL="$1"
+fi
+
+if ! command -v adb &>/dev/null; then
+    echo "Error: adb not found in PATH" >&2
+    echo "Install Android platform-tools or add to PATH." >&2
+    exit 1
+fi
+
+ADB_CMD="adb"
+if [ -n "$DEVICE_SERIAL" ]; then
+    ADB_CMD="adb -s $DEVICE_SERIAL"
+fi
+
+echo "Waiting for device..."
+$ADB_CMD wait-for-device
+
+DEVICE_MODEL=$($ADB_CMD shell getprop ro.product.model 2>/dev/null || echo "unknown")
+ANDROID_VERSION=$($ADB_CMD shell getprop ro.build.version.release 2>/dev/null || echo "unknown")
+echo "Connected to: $DEVICE_MODEL (Android $ANDROID_VERSION)"
+
+DEBUG_APK="$OUTPUT_DIR/waydri-v0.11.0-debug.apk"
+if [ ! -f "$DEBUG_APK" ]; then
+    echo "Debug APK not found. Building..."
+    bash "$SCRIPT_DIR/../build/android_build" debug
+fi
+
+if [ ! -f "$DEBUG_APK" ]; then
+    echo "Error: Could not find or build debug APK" >&2
+    exit 1
+fi
+
+echo "Installing debug APK..."
+$ADB_CMD install -r -t "$DEBUG_APK"
+
+echo "Clearing logcat buffer..."
+$ADB_CMD logcat -c
+
+echo "Starting Waydri compositor..."
+$ADB_CMD shell am start -n com.waydri/.MainActivity
+
+echo "Monitoring logcat (Waydri* tag)..."
+echo "Press Ctrl+C to stop."
+echo "---"
+
+if command -v gdb &>/dev/null; then
+    echo "GDB detected. Setting up remote debug session..."
+    $ADB_CMD forward tcp:5039 tcp:5039
+
+    GDB_SCRIPT="$PROJECT_ROOT/target/debug/waydri"
+    if [ -f "$GDB_SCRIPT" ]; then
+        gdb -batch \
+            -ex "set architecture aarch64" \
+            -ex "target remote :5039" \
+            -ex "source $SCRIPT_DIR/gdbinit" \
+            -ex "continue" \
+            "$GDB_SCRIPT" 2>&1 | while IFS= read -r line; do
+                echo "[gdb] $line"
+            done &
+        GDB_PID=$!
+    fi
+fi
+
+$ADB_CMD logcat -s "Waydri*" "waydri*" 2>&1 &
+LOGCAT_PID=$!
+
+cleanup() {
+    echo ""
+    echo "Stopping debug session..."
+    kill "$LOGCAT_PID" 2>/dev/null || true
+    if [ -n "${GDB_PID:-}" ]; then
+        kill "$GDB_PID" 2>/dev/null || true
+    fi
+    $ADB_CMD shell am force-stop com.waydri 2>/dev/null || true
+    echo "Debug session ended."
+}
+
+trap cleanup EXIT INT TERM
+
+wait "$LOGCAT_PID" 2>/dev/null || true

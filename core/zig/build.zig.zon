@@ -1,0 +1,5 @@
+.{
+    .name = "waydri-core-zig",
+    .version = "0.11.0",
+    .paths = .{"."},
+}

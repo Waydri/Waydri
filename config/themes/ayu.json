@@ -1,0 +1,64 @@
+{
+    "name": "Ayu",
+    "version": "1.0.0",
+    "description": "Ayu dark theme for Waydri",
+    "colors": {
+        "background": "#0f1419",
+        "foreground": "#e6e1cf",
+        "red": "#ff3333",
+        "green": "#b8cc52",
+        "cyan": "#95e6cb",
+        "purple": "#d2a6ff",
+        "yellow": "#e6b450",
+        "orange": "#ff8f40",
+        "blue": "#39bae6",
+        "magenta": "#d2a6ff",
+        "white": "#e6e1cf",
+        "black": "#0f1419",
+        "bright_red": "#ff6666",
+        "bright_green": "#d2e679",
+        "bright_cyan": "#bae8e0",
+        "bright_purple": "#e0bfff",
+        "bright_yellow": "#f0d080",
+        "bright_orange": "#ffbf80",
+        "bright_blue": "#70d4e6",
+        "bright_magenta": "#e0bfff",
+        "bright_white": "#ffffff",
+        "bright_black": "#33414a"
+    },
+    "theme": {
+        "primary": "#39bae6",
+        "secondary": "#d2a6ff",
+        "accent": "#95e6cb",
+        "surface": "#1c2128",
+        "border": "#273747",
+        "shadow": "#000000",
+        "text_primary": "#e6e1cf",
+        "text_secondary": "#bfb5a3",
+        "text_disabled": "#565b66",
+        "error": "#ff3333",
+        "warning": "#e6b450",
+        "success": "#b8cc52",
+        "info": "#39bae6"
+    },
+    "bar": {
+        "background": "#1c2128",
+        "foreground": "#e6e1cf",
+        "border": "#273747"
+    },
+    "window": {
+        "title_focused": "#39bae6",
+        "title_unfocused": "#565b66",
+        "border_focused": "#39bae6",
+        "border_unfocused": "#273747",
+        "border_urgent": "#ff3333"
+    },
+    "workspace": {
+        "active_bg": "#39bae6",
+        "active_fg": "#0f1419",
+        "inactive_bg": "#1c2128",
+        "inactive_fg": "#565b66",
+        "urgent_bg": "#ff3333",
+        "urgent_fg": "#0f1419"
+    }
+}

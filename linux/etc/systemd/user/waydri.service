@@ -1,0 +1,21 @@
+[Unit]
+Description=Waydri Compositor
+Documentation=https://waydri.org/docs
+After=systemd-user-sessions.service display-manager.service
+Wants=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/waydri
+Restart=on-failure
+RestartSec=2
+Environment=WAYLAND_DISPLAY=wayland-0
+Environment=XDG_RUNTIME_DIR=/run/user/%U
+Environment=XDG_CONFIG_HOME=/etc/xdg
+Environment=XDG_CONFIG_DIRS=/etc/xdg
+StandardOutput=journal
+StandardError=journal
+TimeoutStopSec=10
+
+[Install]
+WantedBy=default.target

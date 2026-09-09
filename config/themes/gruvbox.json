@@ -1,0 +1,16 @@
+{
+    "name": "Gruvbox",
+    "colors": {
+        "primary": "#689d6a",
+        "secondary": "#d79921",
+        "accent": "#83a598",
+        "background": "#282828",
+        "surface": "#3c3836",
+        "text": "#ebdbb2",
+        "border": "#504945",
+        "shadow": "#000000"
+    },
+    "font": {"family": "monospace", "size": 10},
+    "border": {"width": 1, "radius": 0},
+    "shadow": {"enabled": false, "offset_x": 0, "offset_y": 2, "blur": 8, "color": "#000000"}
+}

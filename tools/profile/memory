@@ -1,0 +1,26 @@
+#!/bin/bash
+set -euo pipefail
+
+SAMPLES=${1:-60}
+INTERVAL=${2:-1}
+OUTPUT=${3:-"memory_profile.csv"}
+
+echo "timestamp,rss_kb,vms_kb,shared_kb" > "$OUTPUT"
+
+for i in $(seq 1 "$SAMPLES"); do
+    TS=$(date +%s)
+    STATUS=$(cat /proc/self/status 2>/dev/null)
+    RSS=$(echo "$STATUS" | grep "^VmRSS:" | awk '{print $2}')
+    VMS=$(echo "$STATUS" | grep "^VmSize:" | awk '{print $2}')
+    SHARED=$(echo "$STATUS" | grep "^VmLib:" | awk '{print $2}')
+    RSS=${RSS:-0}
+    VMS=${VMS:-0}
+    SHARED=${SHARED:-0}
+    echo "$TS,$RSS,$VMS,$SHARED" >> "$OUTPUT"
+    echo "[$i/$SAMPLES] RSS=${RSS}kB VMS=${VMS}kB Shared=${SHARED}kB"
+    if [ "$i" -lt "$SAMPLES" ]; then
+        sleep "$INTERVAL"
+    fi
+done
+
+echo "Profile saved to $OUTPUT"

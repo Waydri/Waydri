@@ -1,0 +1,37 @@
+stages:
+  - test
+
+test-unit:
+  stage: test
+  image: rust:1.75
+  before_script:
+    - apt-get update && apt-get install -y libwayland-dev libxkbcommon-dev
+  script:
+    - cargo test --test unit_tests -- --nocapture
+  cache:
+    key: cargo-${CI_COMMIT_REF_SLUG}
+    paths:
+      - .cargo/
+
+test-integration:
+  stage: test
+  image: rust:1.75
+  before_script:
+    - apt-get update && apt-get install -y libwayland-dev libxkbcommon-dev
+  script:
+    - cargo test --test integration_tests
+
+test-wayland:
+  stage: test
+  image: rust:1.75
+  before_script:
+    - apt-get update && apt-get install -y libwayland-dev libxkbcommon-dev
+  script:
+    - cargo test --test wayland_tests
+
+lint:
+  stage: test
+  image: rust:1.75
+  script:
+    - cargo fmt --all -- --check
+    - cargo clippy --package waydri-core -- -D warnings
