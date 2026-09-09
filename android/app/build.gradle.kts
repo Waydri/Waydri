@@ -22,12 +22,12 @@ tasks.preBuild {
 android {
     ndkVersion = "26.3.11579264"
     namespace = "com.waydri.compositor"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.waydri.compositor"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 11
         versionName = "0.11"
 
