@@ -1,9 +1,7 @@
 use crate::logger::{LogLevel, Logger};
 use std::ffi::CString;
 
-pub struct SyslogLogger {
-    ident: CString,
-}
+pub struct SyslogLogger;
 
 impl SyslogLogger {
     pub fn new(ident: &str) -> Self {
@@ -11,7 +9,7 @@ impl SyslogLogger {
         unsafe {
             openlog(ident.as_ptr() as *const u8, LOG_PID, LOG_USER);
         }
-        SyslogLogger { ident }
+        SyslogLogger
     }
 
     fn priority(&self, level: LogLevel) -> i32 {
