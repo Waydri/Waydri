@@ -29,7 +29,6 @@ impl Drop for SyslogLogger {
         unsafe {
             closelog();
         }
-        let _ = &self.ident;
     }
 }
 
