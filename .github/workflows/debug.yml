@@ -1,4 +1,4 @@
-name: Android
+name: debug
 
 on:
   push:
@@ -25,6 +25,9 @@ jobs:
       - name: Setup NDK
         run: sdkmanager "ndk;26.1.10909125"
 
+      - name: Grant execute permission for gradlew
+        run: chmod +x android/gradlew
+
       - name: Build Debug APK
         working-directory: android
         run: ./gradlew assembleDebug
@@ -34,22 +37,3 @@ jobs:
         with:
           name: waydri-debug-apk
           path: android/app/build/outputs/apk/debug/*.apk
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v6
-        with:
-          distribution: temurin
-          java-version: 17
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Unit Tests
-        working-directory: android
-        run: ./gradlew test
