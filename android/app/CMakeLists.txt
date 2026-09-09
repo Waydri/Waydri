@@ -23,7 +23,7 @@ else()
     string(TOLOWER ${RUST_BUILD_TYPE} RUST_BUILD_TYPE)
 endif()
 
-set(RUST_LIB ${CMAKE_SOURCE_DIR}/../../../target/${RUST_TARGET}/${RUST_BUILD_TYPE}/libwaydri_core.a)
+set(RUST_LIB ${CMAKE_SOURCE_DIR}/../../target/${RUST_TARGET}/${RUST_BUILD_TYPE}/libwaydri_core.a)
 
 add_library(waydri_jni SHARED
     src/main/jni/waydri_native.cpp
