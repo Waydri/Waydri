@@ -12,9 +12,8 @@ android {
         minSdk = 24
         targetSdk = 35
         versionCode = 11
-        versionName = "0.11.0"
+        versionName = "0.11"
 
-        // Native library name - must match the Rust cdylib name
         ndk {
             abiFilters.add("arm64-v8a")
         }
@@ -42,18 +41,9 @@ android {
         }
     }
 
-    // CMake configuration
     externalNativeBuild {
         cmake {
             path = file("CMakeLists.txt")
-        }
-    }
-
-    // Source sets for JNI
-    sourceSets {
-        getByName("main") {
-            jniLibs.srcDirs("src/main/lib")
-            jni.srcDirs("src/main/jni")
         }
     }
 
