@@ -50,4 +50,4 @@ validated against the schema in core/src/config/schema.rs.
 
 ## License
 
-Licensed under the Apache License, Version 2.0. See LICENSE.
+Licensed under the Apache 2.0 LICENSE. See [LICENSE](https://github.com/Waydri/Waydri/blob/master/LICENSE).
