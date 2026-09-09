@@ -6,14 +6,15 @@ plugins {
 tasks.register<Exec>("buildRust") {
     workingDir = rootProject.projectDir
     val buildType = if (project.gradle.startParameter.taskRequests.toString().contains("Release")) "release" else "debug"
-    commandLine(
-        "cargo", "build",
-        "--target", "aarch64-linux-android",
-        "--target", "armv7-linux-androideabi",
-        "--target", "x86_64-linux-android",
-        "--target", "i686-linux-android",
-        "--$buildType"
-    )
+    val command = mutableListOf("cargo", "build")
+    command.addAll(listOf("--target", "aarch64-linux-android"))
+    command.addAll(listOf("--target", "armv7-linux-androideabi"))
+    command.addAll(listOf("--target", "x86_64-linux-android"))
+    command.addAll(listOf("--target", "i686-linux-android"))
+    if (buildType == "release") {
+        command.add("--release")
+    }
+    commandLine(command)
 }
 tasks.preBuild {
     dependsOn(tasks.named("buildRust"))
@@ -22,12 +23,12 @@ tasks.preBuild {
 android {
     ndkVersion = "26.3.11579264"
     namespace = "com.waydri.compositor"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.waydri.compositor"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 11
         versionName = "0.11"
 
