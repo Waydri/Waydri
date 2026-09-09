@@ -5,17 +5,17 @@ plugins {
 
 android {
     namespace = "com.waydri.compositor"
-    compileSdk = 35
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.waydri.compositor"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 11
         versionName = "0.11"
 
         ndk {
-            abiFilters.add("arm64-v8a")
+            abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64"))
         }
 
         externalNativeBuild {
@@ -67,6 +67,15 @@ android {
         }
         jniLibs {
             useLegacyPackaging = true
+        }
+    }
+
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+            isUniversalApk = true
         }
     }
 }
