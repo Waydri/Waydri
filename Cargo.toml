@@ -10,21 +10,22 @@ repository = "https://github.com/Waydri/Waydri"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
+smithay = { version = "0.3", features = ["backend_egl", "backend_gbm", "renderer_gl", "use_system_lib"] }
 calloop = "0.13"
 log = "0.4"
+env_logger = "0.10"
+android_logger = "0.13"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 thiserror = "1.0"
 anyhow = "1.0"
 drm-sys = { version = "0.1.2", features = ["use_bindgen"] }
 
-[target.'cfg(not(target_os="android"))'.dependencies]
-smithay = { version = "0.3", features = ["backend_egl", "backend_gbm", "renderer_gl", "use_system_lib"] }
-env_logger = "0.10"
-
 [target.'cfg(target_os="android")'.dependencies]
-smithay = { version = "0.3", features = ["backend_egl", "renderer_gl"] }
 android_logger = "0.13"
+
+[target.'cfg(not(target_os="android"))'.dependencies]
+env_logger = "0.10"
 
 [dev-dependencies]
 criterion = "0.5"
