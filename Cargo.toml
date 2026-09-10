@@ -34,6 +34,7 @@ libudev-sys = { git = "https://github.com/Waydri/android-sys-compat", branch = "
 gbm-sys = { git = "https://github.com/Waydri/android-sys-compat", branch = "android" }
 libinput-sys = { git = "https://github.com/Waydri/android-sys-compat", branch = "android" }
 libseat-sys = { git = "https://github.com/Waydri/android-sys-compat", branch = "android" }
+libdbus-sys = { git = "https://github.com/Waydri/android-sys-compat", branch = "android" }
 
 [[bench]]
 name = "compositor_events"
