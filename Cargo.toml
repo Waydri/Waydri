@@ -13,8 +13,6 @@ crate-type = ["cdylib", "rlib"]
 smithay = { version = "0.3", features = ["backend_egl", "backend_gbm", "renderer_gl", "use_system_lib"] }
 calloop = "0.13"
 log = "0.4"
-env_logger = "0.10"
-android_logger = "0.13"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 thiserror = "1.0"
@@ -31,7 +29,11 @@ env_logger = "0.10"
 criterion = "0.5"
 
 [patch.crates-io]
-drm-sys = { git = "https://github.com/Waydri/drm-rs", branch = "android-0.1.2" }
+drm-sys = { git = "https://github.com/Waydri/android-sys-compat", branch = "android" }
+libudev-sys = { git = "https://github.com/Waydri/android-sys-compat", branch = "android" }
+gbm-sys = { git = "https://github.com/Waydri/android-sys-compat", branch = "android" }
+libinput-sys = { git = "https://github.com/Waydri/android-sys-compat", branch = "android" }
+libseat-sys = { git = "https://github.com/Waydri/android-sys-compat", branch = "android" }
 
 [[bench]]
 name = "compositor_events"
