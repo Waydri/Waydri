@@ -31,7 +31,7 @@ env_logger = "0.10"
 criterion = "0.5"
 
 [patch.crates-io]
-drm-sys = { git = "https://github.com/Waydri/drm-rs", branch = "android-x86-support" }
+drm-sys = { git = "https://github.com/Waydri/drm-rs", branch = "android-0.1.2" }
 
 [[bench]]
 name = "compositor_events"
