@@ -32,6 +32,11 @@ jobs:
       - name: Install cargo-ndk
         run: cargo install cargo-ndk
 
+      - name: Install libdrm headers
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libdrm-dev
+
       - name: Build Rust core (debug, only arm64)
         run: |
           cd core
