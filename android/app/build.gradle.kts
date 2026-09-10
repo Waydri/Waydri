@@ -19,6 +19,7 @@ tasks.register<Exec>("buildRust") {
     workingDir = rootProject.projectDir
     dependsOn(tasks.named("setupRust"))
     environment("LIBDRM_INCLUDE_PATH", "/usr/include/libdrm")
+    environment("ANDROID_NDK_HOME", "${System.getenv("ANDROID_HOME") ?: "/usr/local/lib/android/sdk"}/ndk/26.3.11579264")
     val buildType = if (project.gradle.startParameter.taskRequests.toString().contains("Release")) "release" else "debug"
     val command = mutableListOf("cargo", "build")
     command.addAll(listOf("--target", "aarch64-linux-android"))
